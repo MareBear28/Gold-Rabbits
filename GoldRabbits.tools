@@ -1,0 +1,57 @@
+#include <iostream>
+#include <map>
+#include <vector>
+using namespace std;
+
+int goldRabbits(int n)
+{
+	if (n == 0 || n == 1)
+	{
+		return 1;
+	}
+	try
+	{
+		int sum = goldRabbits(n - 1) + goldRabbits(n - 2);
+		if (sum < 0)
+		{
+			throw n;
+		}
+		else
+		{
+			return sum;
+		}
+
+	}
+	catch (int n)
+	{
+		throw "Overflow Error - goldRabbits overflowed using " + to_string(n);
+	}
+}
+
+
+BigInt goldRabbits(BigInt b)
+{
+	static map<BigInt, BigInt> M;
+	BigInt zero(0);
+	BigInt one(1);
+	BigInt two(2);
+
+	if (M.find(b) == M.end())
+	{
+		if (b == zero || b == one)
+		{
+			M.insert(make_pair(b, one));
+			return one;
+		}
+		else
+		{
+			BigInt sum = goldRabbits(b - one) + goldRabbits(b - two);
+			M.insert(make_pair(b, sum));
+			return sum;
+		}
+	}
+	else
+	{
+		return M[b];
+	}
+}
